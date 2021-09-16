@@ -361,3 +361,9 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# ESET Assemblies
+Network.dll
+Protobuf.dll
+ProtobufNetworkMessages.dll
+ServerApi.dll
