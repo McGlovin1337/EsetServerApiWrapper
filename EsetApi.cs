@@ -8,7 +8,7 @@ namespace EsetServerApiWrapper
     {
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool SetDllDirectory(string lpPathName);
+        private static extern bool SetDllDirectory(string lpPathName);
 
         [DllImport("kernel32.dll", CharSet = CharSet.Ansi, EntryPoint = "LoadLibrary", SetLastError = true)]
         private static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpLibFileName);
