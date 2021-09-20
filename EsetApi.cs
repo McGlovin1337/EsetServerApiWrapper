@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 namespace EsetServerApiWrapper
@@ -46,8 +45,27 @@ namespace EsetServerApiWrapper
 
         public EsetApi()
         {
+            // Load Library and Get Pointers for Functions
+            _hMod = LoadLibrary("ServerApi.dll");
+            _initLibPtr = GetProcAddress(_hMod, "era_init_lib");
+            _deinitLibPtr = GetProcAddress(_hMod, "era_deinit_lib");
+            _sendReqPtr = GetProcAddress(_hMod, "era_process_request");
+            _freeResponsePtr = GetProcAddress(_hMod, "era_free");
+
+            // Establish the Delegates for Function Pointers
+            _initLib = Marshal.GetDelegateForFunctionPointer<InitLib>(_initLibPtr);
+            _deinitLib = Marshal.GetDelegateForFunctionPointer<DeInitLib>(_deinitLibPtr);
+            _sendRequest = Marshal.GetDelegateForFunctionPointer<SendReq>(_sendReqPtr);
+            _freeResponse = Marshal.GetDelegateForFunctionPointer<FreeResponse>(_freeResponsePtr);
+
+            // Init the Library
+            _initLib();
+        }
+
+        public EsetApi(string dllDirectory)
+        {
             // Set the Location to Load Unmanaged Libraries
-            SetDllDirectory(Path.GetDirectoryName(System.Reflection.Assembly.GetAssembly(typeof(EsetApi)).Location));
+            SetDllDirectory(dllDirectory);
 
             // Load Library and Get Pointers for Functions
             _hMod = LoadLibrary("ServerApi.dll");
